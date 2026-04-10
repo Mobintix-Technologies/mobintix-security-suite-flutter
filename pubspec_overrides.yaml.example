@@ -1,0 +1,6 @@
+# Copy to pubspec_overrides.yaml (gitignored) for monorepo dev next to mobintix_ui_kit:
+#   cp pubspec_overrides.yaml.example pubspec_overrides.yaml
+
+dependency_overrides:
+  mobintix_ui_kit:
+    path: ../mobintix_ui_kit

@@ -1,0 +1,39 @@
+name: mobintix_security_suite
+description: >-
+  API-driven security flow widgets (MPIN, OTP, biometric, face) built on
+  mobintix_ui_kit for fintech-grade Flutter apps.
+version: 0.0.1
+
+homepage: https://pub.dev/packages/mobintix_security_suite
+repository: https://github.com/Mobintix-Package/mobintix_security_suite
+issue_tracker: https://github.com/Mobintix-Package/mobintix_security_suite_demo/issues
+
+topics:
+  - security
+  - authentication
+  - otp
+  - biometric
+  - fintech
+
+environment:
+  sdk: ^3.2.0
+  flutter: '>=3.16.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  equatable: ^2.0.5
+  uuid: ^4.5.1
+  camera: ^0.12.0+1
+  google_mlkit_commons: ^0.9.0
+  google_mlkit_face_detection: ^0.12.0
+  local_auth: ^2.3.0
+  mobintix_ui_kit: ^0.0.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
