@@ -1,0 +1,7 @@
+# Consistent LF on all platforms so `dart format` and `dart pub publish --dry-run`
+# do not see spurious diffs on Linux CI vs macOS/Windows checkouts.
+* text=auto
+*.dart text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.md text eol=lf

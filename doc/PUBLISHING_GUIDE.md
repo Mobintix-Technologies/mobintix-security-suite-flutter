@@ -137,8 +137,7 @@ Two workflow files in `.github/workflows/` (pushes only run **one** workflow so 
 | Install deps | `flutter pub get` |
 | Check format | `dart format --set-exit-if-changed lib/ test/` |
 | Analyze | `flutter analyze --fatal-infos` |
-| Test | `flutter test --coverage` |
-| Dry-run | `dart pub publish --dry-run` |
+| Test | `flutter test` |
 
 **Release & Version Bump** (manual only)
 
