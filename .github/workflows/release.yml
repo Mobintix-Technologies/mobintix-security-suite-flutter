@@ -1,0 +1,105 @@
+# Same pattern as mobintix_ui_kit: manual only — never add `push` here or you will
+# duplicate CI on every commit.
+
+name: Release & Version Bump
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: 'Version bump type'
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+      prerelease:
+        description: 'Pre-release label (leave empty for stable)'
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Bump Version & Tag
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Read current version
+        id: current
+        run: |
+          VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //')
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Current version: $VERSION"
+
+      - name: Calculate next version
+        id: next
+        run: |
+          CURRENT="${{ steps.current.outputs.version }}"
+          BASE=$(echo "$CURRENT" | sed 's/-.*//')
+          MAJOR=$(echo "$BASE" | cut -d. -f1)
+          MINOR=$(echo "$BASE" | cut -d. -f2)
+          PATCH=$(echo "$BASE" | cut -d. -f3)
+
+          case "${{ inputs.bump }}" in
+            major)
+              MAJOR=$((MAJOR + 1))
+              MINOR=0
+              PATCH=0
+              ;;
+            minor)
+              MINOR=$((MINOR + 1))
+              PATCH=0
+              ;;
+            patch)
+              PATCH=$((PATCH + 1))
+              ;;
+          esac
+
+          NEXT="$MAJOR.$MINOR.$PATCH"
+          if [ -n "${{ inputs.prerelease }}" ]; then
+            NEXT="$NEXT-${{ inputs.prerelease }}"
+          fi
+
+          echo "version=$NEXT" >> "$GITHUB_OUTPUT"
+          echo "Next version: $NEXT"
+
+      - name: Update pubspec.yaml
+        run: |
+          sed -i "s/^version: .*/version: ${{ steps.next.outputs.version }}/" pubspec.yaml
+
+      - name: Update CHANGELOG.md
+        run: |
+          DATE=$(date +%Y-%m-%d)
+          NEXT="${{ steps.next.outputs.version }}"
+          sed -i "/^## /i ## [$NEXT] - $DATE\n\n### Changed\n- Version bump to $NEXT\n" CHANGELOG.md
+
+      - name: Commit and tag
+        run: |
+          NEXT="${{ steps.next.outputs.version }}"
+          git add pubspec.yaml CHANGELOG.md
+          git commit -m "chore: release v$NEXT"
+          git tag "v$NEXT"
+          git push origin HEAD --tags
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          NEXT="${{ steps.next.outputs.version }}"
+          gh release create "v$NEXT" \
+            --title "v$NEXT" \
+            --generate-notes

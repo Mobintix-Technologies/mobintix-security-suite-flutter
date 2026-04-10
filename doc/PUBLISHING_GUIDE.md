@@ -119,60 +119,55 @@ Check GitHub → Actions → the **Publish to pub.dev** workflow should run.
 
 ## 4. CI/CD Workflow Overview
 
-Two workflow files in `.github/workflows/` (pushes only run **one** workflow so you do not get duplicate jobs per commit):
+Same **three-workflow** layout as **[mobintix_ui_kit](https://github.com/Mobintix-Package/mobintix_ui_kit)** (no `example/` here — use **mobintix_security_suite_demo** as the runnable app):
 
-### `ci.yml` — CI + manual version bump
+### `ci.yml` — Continuous integration
 
-**Triggers**
-
-| Event | What runs |
-| --- | --- |
-| Push to `main` / `develop`, or PR to `main` | Job **Analyze & Test** only |
-| **Run workflow** (manual) | Job **Release & Version Bump** only |
-
-**Analyze & Test** (push / PR)
+```
+Triggers: Push to main/develop, PRs to main
+```
 
 | Step | Command |
 |---|---|
 | Install deps | `flutter pub get` |
 | Check format | `dart format --set-exit-if-changed lib/ test/` |
 | Analyze | `flutter analyze --fatal-infos` |
-| Test | `flutter test` |
+| Test | `flutter test --coverage` |
+| Dry-run | `dart pub publish --dry-run` |
 
-**Release & Version Bump** (manual only)
+### `release.yml` — Version bump & tag (manual only)
 
-1. Reads current version from `pubspec.yaml`
-2. Bumps it based on your selection (patch/minor/major)
-3. Updates `pubspec.yaml` and `CHANGELOG.md`
-4. Commits `chore: release vX.Y.Z`, creates git tag, pushes
-5. Creates a GitHub Release with auto-generated notes
+```
+Triggers: workflow_dispatch only — do not add push: or it will duplicate CI
+```
+
+1. Bumps `pubspec.yaml` and prepends a **Keep a Changelog**–style entry to `CHANGELOG.md`
+2. Commits, tags `vX.Y.Z`, pushes (tag triggers **publish.yml**)
+3. Creates a GitHub Release
 
 ### `publish.yml` — Publish to pub.dev
 
 ```
-Triggers: When a semver v* tag is pushed (e.g. v0.0.1), after the manual release job above
+Triggers: Push of semver tag v* (e.g. v0.0.1)
 ```
 
-1. Runs full checks (format, analyze, test)
-2. Publishes via `dart pub publish --force`
-3. Authenticates via OIDC (no secrets)
+1. Format, analyze, test
+2. `dart pub publish --force` with OIDC (trusted publishing on pub.dev)
 
 ### Flow
 
 ```
-  Actions → CI → Run workflow (manual)
+  Actions → Release & Version Bump → Run workflow
          │
          ▼
   ┌─────────────────┐
-  │  ci.yml          │
-  │  Release job     │
+  │  release.yml     │
   │  Bump + tag      │
   └────────┬─────────┘
-           │ tag push triggers
+           │ tag push
            ▼
   ┌─────────────────┐
   │  publish.yml     │
-  │  Analyze & Test  │
   │  Publish pub.dev │
   └─────────────────┘
 ```
@@ -184,7 +179,7 @@ Triggers: When a semver v* tag is pushed (e.g. v0.0.1), after the manual release
 ### Using GitHub Actions (Recommended)
 
 1. Go to GitHub → **Actions** tab.
-2. Click **CI** in the sidebar (same workflow that runs on push).
+2. Click **Release & Version Bump** in the sidebar (same as mobintix_ui_kit).
 3. Click **Run workflow** → choose branch (usually `main`).
 4. Select bump type:
 
@@ -195,7 +190,7 @@ Triggers: When a semver v* tag is pushed (e.g. v0.0.1), after the manual release
 | **major** | Breaking API changes | 0.1.0 → 1.0.0 |
 
 5. (Optional) Enter pre-release label (`beta`, `rc.1`).
-6. Click **Run workflow**. When the tag is pushed, **Publish to pub.dev** (`publish.yml`) runs separately—wait for that workflow too.
+6. Click **Run workflow**. When the tag is pushed, **Publish to pub.dev** runs automatically—wait for that workflow to finish.
 7. Verify on pub.dev: `https://pub.dev/packages/mobintix_security_suite`
 
 ---
@@ -269,6 +264,6 @@ Each file must be **under 8 MB**.
 | Login to pub.dev | `dart pub login` |
 | Check before publish | `dart pub publish --dry-run` |
 | First publish | `dart pub publish` |
-| Release new version | GitHub Actions → **CI** → Run workflow (Release job) |
+| Release new version | GitHub Actions → **Release & Version Bump** → Run workflow |
 | Check pub score | `https://pub.dev/packages/mobintix_security_suite/score` |
 | View package | `https://pub.dev/packages/mobintix_security_suite` |
