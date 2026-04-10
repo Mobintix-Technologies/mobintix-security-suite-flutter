@@ -101,7 +101,7 @@ Trusted publishing uses OIDC — no secrets needed.
 | Field | Value |
 |---|---|
 | **Repository** | `Mobintix-Package/mobintix_security_suite` |
-| **Tag pattern** | `v*` |
+| **Tag pattern** | `v[0-9]+.[0-9]+.[0-9]+*` (e.g. `v0.0.1`, `v1.0.0-beta.1`) — same as mobintix_ui_kit |
 | **Require environment** | Leave empty |
 
 4. Click **Save**.
@@ -150,7 +150,7 @@ Triggers: Manual dispatch from GitHub Actions UI
 ### `publish.yml` — Publish to pub.dev
 
 ```
-Triggers: When a v* tag is pushed (auto-triggered by release.yml)
+Triggers: When a semver `v*` tag is pushed (e.g. `v0.0.1`; auto-triggered by release.yml)
 ```
 
 1. Runs full CI checks (format, analyze, test)
@@ -229,7 +229,7 @@ Run `dart pub publish --dry-run` and fix all listed errors.
 
 - Verify trusted publishing is configured on pub.dev Admin → Automated publishing.
 - Repository name must match exactly (`Mobintix-Package/mobintix_security_suite`).
-- Tag pattern must be `v*`.
+- Tag pattern must match the workflow (semver-style tags like `v0.0.1`; see `publish.yml`).
 - `publish.yml` must have `permissions: id-token: write`.
 
 ### "Pub score is low"
@@ -242,31 +242,25 @@ Run `dart pub publish --dry-run` and fix all listed errors.
 
 ## 8. Screenshots for pub.dev
 
-This package does **not** ship screenshot PNGs yet. They are **optional** for publishing (the package validates without them) but improve the **pub score** and listing, same idea as [mobintix_ui_kit](https://pub.dev/packages/mobintix_ui_kit).
+The repo lists **four PNGs** under **`screenshots/`** in **`pubspec.yaml`** → **`screenshots:`**, similar to [mobintix_ui_kit](https://pub.dev/packages/mobintix_ui_kit).
 
-### How to add them
+Canonical filenames (must match **`pubspec.yaml`** unless you change both). Match **screen content**, not only tab order (see **[mobintix_security_suite_demo](https://github.com/Mobintix-Package/mobintix_security_suite_demo)** README).
 
-1. Run the public **[mobintix_security_suite_demo](https://github.com/Mobintix-Package/mobintix_security_suite_demo)** on a phone or emulator (or Chrome for flows that work on web).
-2. Capture a few representative screens (e.g. MPIN, OTP, biometric, face verification). Use a consistent **light** theme and readable resolution (roughly **1280×720** or similar is fine; each file must be **under 8 MB**).
-3. Save PNGs under **`screenshots/`** in this repo (this folder is reserved for that purpose).
-4. Add a top-level **`screenshots:`** block to **`pubspec.yaml`** (sibling of `dependencies:`), for example:
+| File | Tab | What the PNG should show |
+|------|-----|---------------------------|
+| **`screenshots/mpin.png`** | MPIN | Verify (or create) MPIN with keypad and PIN dots |
+| **`screenshots/otp.png`** | OTP | After “Send OTP”: SMS-style banner, six-digit entry, countdown |
+| **`screenshots/biometric.png`** | Biometric | Authenticate screen when enrolled (fingerprint + CTA) |
+| **`screenshots/face.png`** | Face | Live camera, oval guide, Face Authentication / Verify |
 
-```yaml
-screenshots:
-  - description: 'MPIN entry with numeric keypad'
-    path: screenshots/mpin.png
-  - description: 'OTP verification with countdown'
-    path: screenshots/otp.png
-  - description: 'Biometric authentication'
-    path: screenshots/biometric.png
-  - description: 'Face verification with camera guide'
-    path: screenshots/face.png
-```
+Workflow:
 
-5. Run **`dart pub publish --dry-run`** — it will fail if any listed path is missing.
-6. Commit the PNGs and `pubspec.yaml` change, then publish or tag as usual.
+1. Run **[mobintix_security_suite_demo](https://github.com/Mobintix-Package/mobintix_security_suite_demo)** on a device or emulator (see that repo’s README — *Screenshot reference* and *For maintainers*).
+2. Capture the correct screen for each filename (see table above; order of tabs is **not** enough — e.g. OTP needs the code-entry screen, not MPIN).
+3. Copy the four PNGs into **`mobintix_security_suite/screenshots/`** and, for the public gallery, into **`mobintix_security_suite_demo/screenshots/`** (same names in both repos).
+4. Run **`dart pub publish --dry-run`** before publishing.
 
-Until those files exist, **omit** the `screenshots:` block so CI and dry-run stay green.
+Each file must be **under 8 MB**.
 
 ---
 

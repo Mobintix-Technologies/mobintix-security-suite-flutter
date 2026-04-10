@@ -7,7 +7,28 @@ Flutter widgets and models for **MPIN**, **OTP**, **device biometrics**, and **f
 
 **Install from [pub.dev](https://pub.dev/packages/mobintix_security_suite).** The canonical GitHub repository for this package may be **private**; **bugs, questions, and feature requests** from integrators should go to [**Issues on the public demo app**](https://github.com/Mobintix-Package/mobintix_security_suite_demo/issues).
 
-**Reference implementation:** clone the public **[mobintix_security_suite_demo](https://github.com/Mobintix-Package/mobintix_security_suite_demo)** — Firestore-driven multi-step challenges, `SecuritySuiteTheme`, camera / ML Kit face preview, and `local_auth`. Its `pubspec.yaml` pins the same major package lines as below.
+**Reference implementation:** clone the public **[mobintix_security_suite_demo](https://github.com/Mobintix-Package/mobintix_security_suite_demo)** — Firestore-driven multi-step challenges, `SecuritySuiteTheme`, camera / ML Kit face preview, and `local_auth`. Its `pubspec.yaml` pins the same major package lines as below. That demo repo also ships the same **`screenshots/`** PNGs and filenames as this package (see the demo README, *Screenshot reference*).
+
+---
+
+## Screenshot reference
+
+These files are listed in **`pubspec.yaml`** for the [pub.dev package page](https://pub.dev/packages/mobintix_security_suite). They are captured from the public **[mobintix_security_suite_demo](https://github.com/Mobintix-Package/mobintix_security_suite_demo)** on a **phone or emulator** (not web). The **same PNGs and names** live under **`screenshots/`** in [mobintix_security_suite_demo](https://github.com/Mobintix-Package/mobintix_security_suite_demo) so you can browse them without cloning this package repo.
+
+| MPIN | OTP |
+|:---:|:---:|
+| ![MPIN](screenshots/mpin.png) | ![OTP](screenshots/otp.png) |
+
+| Biometric | Face |
+|:---:|:---:|
+| ![Biometric](screenshots/biometric.png) | ![Face](screenshots/face.png) |
+
+| File | What it shows |
+| --- | --- |
+| `mpin.png` | MPIN — verify flow with keypad, PIN dots, and Create/Verify toggle |
+| `otp.png` | OTP — simulated SMS code, six-digit entry, and countdown timer |
+| `biometric.png` | Biometric — fingerprint authenticate screen (enrolled state) |
+| `face.png` | Face — live camera preview with oval guide and verify action |
 
 ---
 
@@ -186,8 +207,8 @@ flutter test
 
 ## Documentation
 
-- **[Publishing guide](doc/PUBLISHING_GUIDE.md)** — pub.dev, trusted publishing, private repo notes.
-- **Demo app** — [mobintix_security_suite_demo](https://github.com/Mobintix-Package/mobintix_security_suite_demo)
+- **[Publishing guide](doc/PUBLISHING_GUIDE.md)** — pub.dev, trusted publishing, private repo notes, screenshots (see §8).
+- **Demo app** — [mobintix_security_suite_demo](https://github.com/Mobintix-Package/mobintix_security_suite_demo) — reference UI, Firebase setup, and **screenshot reference** (same PNGs as pub.dev).
 
 ---
 

@@ -10,3 +10,4 @@
 - Standalone widgets: `MpinView`, `OtpView`, `BiometricView`, `FaceDetectionView`, plus enrollment/registration views where applicable.
 - `SecuritySuiteTheme` (`ThemeExtension`) for host-controlled security UI tokens.
 - Widgets themed via `mobintix_ui_kit`; README and publishing docs; issues tracked on public demo repo.
+- Pub.dev **`screenshots/`** assets documented like **mobintix_ui_kit**: package README + public **mobintix_security_suite_demo** `screenshots/` folder and demo README (*Screenshot reference*).

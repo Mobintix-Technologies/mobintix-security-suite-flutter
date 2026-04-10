@@ -7,7 +7,8 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  analyze-and-test:
+    name: Analyze & Test
     runs-on: ubuntu-latest
 
     steps:
@@ -16,6 +17,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
+          cache: true
 
       - name: Install dependencies
         run: flutter pub get

@@ -35,5 +35,15 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^6.0.0
 
+screenshots:
+  - description: 'MPIN — verify flow with keypad, PIN dots, and Create/Verify toggle'
+    path: screenshots/mpin.png
+  - description: 'OTP — simulated SMS code, six-digit entry, and countdown timer'
+    path: screenshots/otp.png
+  - description: 'Biometric — fingerprint authenticate screen (enrolled state)'
+    path: screenshots/biometric.png
+  - description: 'Face — live camera preview with oval guide and verify action'
+    path: screenshots/face.png
+
 flutter:
   uses-material-design: true
