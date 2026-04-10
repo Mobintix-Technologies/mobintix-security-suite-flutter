@@ -119,13 +119,18 @@ Check GitHub → Actions → the **Publish to pub.dev** workflow should run.
 
 ## 4. CI/CD Workflow Overview
 
-Three workflows in `.github/workflows/`:
+Two workflow files in `.github/workflows/` (pushes only run **one** workflow so you do not get duplicate jobs per commit):
 
-### `ci.yml` — Continuous Integration
+### `ci.yml` — CI + manual version bump
 
-```
-Triggers: Push to main/develop, PRs to main
-```
+**Triggers**
+
+| Event | What runs |
+| --- | --- |
+| Push to `main` / `develop`, or PR to `main` | Job **Analyze & Test** only |
+| **Run workflow** (manual) | Job **Release & Version Bump** only |
+
+**Analyze & Test** (push / PR)
 
 | Step | Command |
 |---|---|
@@ -135,14 +140,10 @@ Triggers: Push to main/develop, PRs to main
 | Test | `flutter test --coverage` |
 | Dry-run | `dart pub publish --dry-run` |
 
-### `release.yml` — Version Bump & Tag (Manual Trigger)
-
-```
-Triggers: Manual dispatch from GitHub Actions UI
-```
+**Release & Version Bump** (manual only)
 
 1. Reads current version from `pubspec.yaml`
-2. Bumps it based on selection (patch/minor/major)
+2. Bumps it based on your selection (patch/minor/major)
 3. Updates `pubspec.yaml` and `CHANGELOG.md`
 4. Commits `chore: release vX.Y.Z`, creates git tag, pushes
 5. Creates a GitHub Release with auto-generated notes
@@ -150,32 +151,30 @@ Triggers: Manual dispatch from GitHub Actions UI
 ### `publish.yml` — Publish to pub.dev
 
 ```
-Triggers: When a semver `v*` tag is pushed (e.g. `v0.0.1`; auto-triggered by release.yml)
+Triggers: When a semver v* tag is pushed (e.g. v0.0.1), after the manual release job above
 ```
 
-1. Runs full CI checks (format, analyze, test)
+1. Runs full checks (format, analyze, test)
 2. Publishes via `dart pub publish --force`
 3. Authenticates via OIDC (no secrets)
 
 ### Flow
 
 ```
-  Trigger "Release" workflow (GitHub Actions UI)
+  Actions → CI → Run workflow (manual)
          │
          ▼
   ┌─────────────────┐
-  │  release.yml     │
-  │  Bump version    │
-  │  Update CHANGELOG│
-  │  Commit & Tag    │
+  │  ci.yml          │
+  │  Release job     │
+  │  Bump + tag      │
   └────────┬─────────┘
            │ tag push triggers
            ▼
   ┌─────────────────┐
   │  publish.yml     │
   │  Analyze & Test  │
-  │  Publish to      │
-  │  pub.dev         │
+  │  Publish pub.dev │
   └─────────────────┘
 ```
 
@@ -186,8 +185,8 @@ Triggers: When a semver `v*` tag is pushed (e.g. `v0.0.1`; auto-triggered by rel
 ### Using GitHub Actions (Recommended)
 
 1. Go to GitHub → **Actions** tab.
-2. Click **Release & Version Bump** in the sidebar.
-3. Click **Run workflow**.
+2. Click **CI** in the sidebar (same workflow that runs on push).
+3. Click **Run workflow** → choose branch (usually `main`).
 4. Select bump type:
 
 | Type | When | Example |
@@ -197,7 +196,7 @@ Triggers: When a semver `v*` tag is pushed (e.g. `v0.0.1`; auto-triggered by rel
 | **major** | Breaking API changes | 0.1.0 → 1.0.0 |
 
 5. (Optional) Enter pre-release label (`beta`, `rc.1`).
-6. Click **Run workflow** and wait for both workflows to complete.
+6. Click **Run workflow**. When the tag is pushed, **Publish to pub.dev** (`publish.yml`) runs separately—wait for that workflow too.
 7. Verify on pub.dev: `https://pub.dev/packages/mobintix_security_suite`
 
 ---
@@ -271,6 +270,6 @@ Each file must be **under 8 MB**.
 | Login to pub.dev | `dart pub login` |
 | Check before publish | `dart pub publish --dry-run` |
 | First publish | `dart pub publish` |
-| Release new version | GitHub Actions → Release & Version Bump |
+| Release new version | GitHub Actions → **CI** → Run workflow (Release job) |
 | Check pub score | `https://pub.dev/packages/mobintix_security_suite/score` |
 | View package | `https://pub.dev/packages/mobintix_security_suite` |

@@ -1,14 +1,36 @@
 name: CI
 
+# One workflow file for pushes/PRs (analyze & test) and manual version bumps.
+# Avoid a separate release.yml that could be misconfigured to also listen on
+# push and duplicate every CI run on GitHub.
+
 on:
   push:
     branches: [main, develop]
   pull_request:
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: 'Version bump type (manual release only)'
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+      prerelease:
+        description: 'Pre-release label (e.g. beta, rc.1) — leave empty for stable'
+        required: false
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   analyze-and-test:
     name: Analyze & Test
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
 
     steps:
@@ -36,3 +58,66 @@ jobs:
 
       - name: Dry-run publish
         run: dart pub publish --dry-run
+
+  release:
+    name: Release & Version Bump
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Read current version
+        id: current
+        run: |
+          VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //')
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Compute next version
+        id: next
+        run: |
+          IFS='.' read -r MAJOR MINOR PATCH <<< "${{ steps.current.outputs.version }}"
+          PATCH="${PATCH%%-*}"
+          case "${{ inputs.bump }}" in
+            major) MAJOR=$((MAJOR + 1)); MINOR=0; PATCH=0 ;;
+            minor) MINOR=$((MINOR + 1)); PATCH=0 ;;
+            patch) PATCH=$((PATCH + 1)) ;;
+          esac
+          NEXT="$MAJOR.$MINOR.$PATCH"
+          if [ -n "${{ inputs.prerelease }}" ]; then
+            NEXT="$NEXT-${{ inputs.prerelease }}"
+          fi
+          echo "version=$NEXT" >> "$GITHUB_OUTPUT"
+
+      - name: Update pubspec.yaml
+        run: sed -i "s/^version: .*/version: ${{ steps.next.outputs.version }}/" pubspec.yaml
+
+      - name: Update CHANGELOG.md
+        run: |
+          DATE=$(date +%Y-%m-%d)
+          sed -i "2i\\
+          \\
+          ## ${{ steps.next.outputs.version }} — $DATE\\
+          \\
+          - Release via CI." CHANGELOG.md
+
+      - name: Commit & tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add pubspec.yaml CHANGELOG.md
+          git commit -m "chore: release v${{ steps.next.outputs.version }}"
+          git tag "v${{ steps.next.outputs.version }}"
+          git push origin HEAD --tags
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "v${{ steps.next.outputs.version }}" \
+            --title "v${{ steps.next.outputs.version }}" \
+            --generate-notes
