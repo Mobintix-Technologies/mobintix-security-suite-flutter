@@ -48,8 +48,7 @@ class _FaceRegistrationViewState extends State<FaceRegistrationView> {
 
   String get _statusText => switch (widget.status) {
         FaceRegistrationStatus.notRegistered =>
-          _c.subtitle ??
-              'Position your face in the frame and tap Register.',
+          _c.subtitle ?? 'Position your face in the frame and tap Register.',
         FaceRegistrationStatus.scanning =>
           _c.scanningText ?? 'Scanning your face — hold still…',
         FaceRegistrationStatus.registering =>

@@ -110,8 +110,7 @@ class _LiveCameraPreviewState extends State<LiveCameraPreview>
     if (!mounted || !_mlDetectionEnabled || _faceDetector == null) return;
     final now = DateTime.now();
     if (_lastProcessTime != null &&
-        now.difference(_lastProcessTime!) <
-            const Duration(milliseconds: 220)) {
+        now.difference(_lastProcessTime!) < const Duration(milliseconds: 220)) {
       return;
     }
     if (_frameInFlight) return;
@@ -126,21 +125,18 @@ class _LiveCameraPreviewState extends State<LiveCameraPreview>
 
     _frameInFlight = true;
     _lastProcessTime = now;
-    _faceDetector!
-        .processImage(input)
-        .then((faces) {
-          _frameInFlight = false;
-          if (!mounted) return;
-          final hasFace = faces.isNotEmpty;
-          widget.facePresent?.value = hasFace;
-          if (_landmarksEnabled) {
-            widget.faceLandmarks!.value =
-                hasFace ? _computeSignature(faces.first) : null;
-          }
-        })
-        .catchError((_) {
-          _frameInFlight = false;
-        });
+    _faceDetector!.processImage(input).then((faces) {
+      _frameInFlight = false;
+      if (!mounted) return;
+      final hasFace = faces.isNotEmpty;
+      widget.facePresent?.value = hasFace;
+      if (_landmarksEnabled) {
+        widget.faceLandmarks!.value =
+            hasFace ? _computeSignature(faces.first) : null;
+      }
+    }).catchError((_) {
+      _frameInFlight = false;
+    });
   }
 
   /// Computes normalized ratios from face landmarks that serve as a
@@ -290,8 +286,7 @@ class _LiveCameraPreviewState extends State<LiveCameraPreview>
         theme?.cameraPlaceholderColor ?? _defaultPlaceholder;
     final overlayTextColor =
         theme?.cameraOverlayTextColor ?? _defaultOverlayText;
-    final liveColor =
-        theme?.cameraLiveIndicatorColor ?? _defaultLiveIndicator;
+    final liveColor = theme?.cameraLiveIndicatorColor ?? _defaultLiveIndicator;
 
     final Widget cameraBody;
     if (_hasError) {
@@ -375,8 +370,8 @@ class _LiveCameraPreviewState extends State<LiveCameraPreview>
                   height: 8,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: liveColor.withValues(
-                        alpha: 0.3 + _blink.value * 0.7),
+                    color:
+                        liveColor.withValues(alpha: 0.3 + _blink.value * 0.7),
                   ),
                 ),
               ),

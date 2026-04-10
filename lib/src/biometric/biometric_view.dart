@@ -106,8 +106,8 @@ class _BiometricViewState extends State<BiometricView>
     final title = _c.title ?? 'Biometric sign-in';
     final subtitle = _c.subtitle ??
         'Tap Authenticate below. Your phone will open its own security '
-        'window—that prompt is the real fingerprint or Face ID check. '
-        'This screen only starts that flow.';
+            'window—that prompt is the real fingerprint or Face ID check. '
+            'This screen only starts that flow.';
     final hasError = _c.errorText != null;
     final iconData = _biometricIconData(_c.biometricType);
     final ringColor =
@@ -124,10 +124,8 @@ class _BiometricViewState extends State<BiometricView>
       child: Column(
         children: [
           const Spacer(flex: 2),
-
           const SecurityBadge(),
           SizedBox(height: spacing.lg),
-
           AppText.headlineMedium(title, textAlign: TextAlign.center),
           const VSpace.sm(),
           AppText.bodyMedium(
@@ -135,7 +133,6 @@ class _BiometricViewState extends State<BiometricView>
             textAlign: TextAlign.center,
             color: colors.textSecondary,
           ),
-
           if (_busy) ...[
             const VSpace.sm(),
             AppText.bodySmall(
@@ -145,7 +142,6 @@ class _BiometricViewState extends State<BiometricView>
               color: colors.primary,
             ),
           ],
-
           if (hasError) ...[
             const VSpace.sm(),
             AppText.bodySmall(
@@ -154,9 +150,7 @@ class _BiometricViewState extends State<BiometricView>
               color: colors.error,
             ),
           ],
-
           SizedBox(height: spacing.xl),
-
           GestureDetector(
             onTap: widget.onPrimary == null || _busy ? null : _authenticate,
             child: Semantics(
@@ -211,7 +205,6 @@ class _BiometricViewState extends State<BiometricView>
               ),
             ),
           ),
-
           SizedBox(height: spacing.sm),
           AppText.labelSmall(
             _busy
@@ -220,9 +213,7 @@ class _BiometricViewState extends State<BiometricView>
             textAlign: TextAlign.center,
             color: colors.textSecondary,
           ),
-
           const Spacer(flex: 3),
-
           AppButton.primary(
             text: _c.primaryLabel ?? 'Authenticate',
             leadingIcon: iconData,
@@ -230,7 +221,6 @@ class _BiometricViewState extends State<BiometricView>
             isFullWidth: true,
             onPressed: widget.onPrimary == null ? null : _authenticate,
           ),
-
           if (_c.alternateLabel != null && widget.onAlternate != null) ...[
             const VSpace.md(),
             AppButton.ghost(
@@ -238,7 +228,6 @@ class _BiometricViewState extends State<BiometricView>
               onPressed: _busy ? null : () async => widget.onAlternate!(),
             ),
           ],
-
           SizedBox(height: spacing.xl),
         ],
       ),

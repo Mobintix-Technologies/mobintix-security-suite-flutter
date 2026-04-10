@@ -27,8 +27,7 @@ InputImage? buildMlKitInputImage({
       DeviceOrientation.portraitDown: 180,
       DeviceOrientation.landscapeRight: 270,
     };
-    var rotationCompensation =
-        orientations[controller.value.deviceOrientation];
+    var rotationCompensation = orientations[controller.value.deviceOrientation];
     if (rotationCompensation == null) return null;
     if (camera.lensDirection == CameraLensDirection.front) {
       rotationCompensation = (sensorOrientation + rotationCompensation) % 360;

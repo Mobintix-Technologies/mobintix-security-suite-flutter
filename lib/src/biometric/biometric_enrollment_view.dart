@@ -115,7 +115,7 @@ class _BiometricEnrollmentViewState extends State<BiometricEnrollmentView>
         BiometricEnrollmentStatus.notEnrolled =>
           _c.title ?? '$_biometricLabel Not Enabled',
         BiometricEnrollmentStatus.awaitingScan =>
-            'Use your device security prompt',
+          'Use your device security prompt',
         BiometricEnrollmentStatus.scanning => 'Sample saved',
         BiometricEnrollmentStatus.enrolling => 'Saving…',
         BiometricEnrollmentStatus.enrolled =>
@@ -124,27 +124,22 @@ class _BiometricEnrollmentViewState extends State<BiometricEnrollmentView>
       };
 
   String get _subtitleText => switch (widget.status) {
-        BiometricEnrollmentStatus.notEnrolled =>
-          _c.subtitle ??
-              '$_biometricLabel is not enabled on this device. '
-                  'Enable it to use biometric authentication.',
+        BiometricEnrollmentStatus.notEnrolled => _c.subtitle ??
+            '$_biometricLabel is not enabled on this device. '
+                'Enable it to use biometric authentication.',
         BiometricEnrollmentStatus.awaitingScan =>
-            'A secure system window will appear. Follow the instructions '
-            'there; this screen only shows progress '
-            '(step ${widget.scanProgress + 1} of ${widget.totalScans}).',
+          'A secure system window will appear. Follow the instructions '
+              'there; this screen only shows progress '
+              '(step ${widget.scanProgress + 1} of ${widget.totalScans}).',
         BiometricEnrollmentStatus.scanning =>
-          _c.enrollingText ??
-              'Finishing this step before the next prompt…',
-        BiometricEnrollmentStatus.enrolling =>
-          'Saving enrollment…',
-        BiometricEnrollmentStatus.enrolled =>
-          _c.successSubtitle ??
-              '$_biometricLabel has been enabled successfully. '
-                  'You can now proceed with biometric verification.',
-        BiometricEnrollmentStatus.error =>
-          _c.errorText ??
-              'Failed to enable $_biometricLabel. '
-                  'Please try again or open device settings.',
+          _c.enrollingText ?? 'Finishing this step before the next prompt…',
+        BiometricEnrollmentStatus.enrolling => 'Saving enrollment…',
+        BiometricEnrollmentStatus.enrolled => _c.successSubtitle ??
+            '$_biometricLabel has been enabled successfully. '
+                'You can now proceed with biometric verification.',
+        BiometricEnrollmentStatus.error => _c.errorText ??
+            'Failed to enable $_biometricLabel. '
+                'Please try again or open device settings.',
       };
 
   bool get _isActive =>
@@ -174,19 +169,16 @@ class _BiometricEnrollmentViewState extends State<BiometricEnrollmentView>
         Responsive.value<double>(context, xs: 92, md: 110, lg: 124);
     final iconSize = theme?.scanRingIconSize ??
         Responsive.value<double>(context, xs: 42, md: 52, lg: 60);
-    final ringProgress = _awaitingSystemPrompt
-        ? 0.45
-        : (_isActive ? _pulseCtrl.value : 0.5);
+    final ringProgress =
+        _awaitingSystemPrompt ? 0.45 : (_isActive ? _pulseCtrl.value : 0.5);
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: spacing.lg),
       child: Column(
         children: [
           SizedBox(height: spacing.md),
-
           const SecurityBadge(),
           SizedBox(height: spacing.lg),
-
           AppText.headlineMedium(
             _titleText,
             textAlign: TextAlign.center,
@@ -200,9 +192,7 @@ class _BiometricEnrollmentViewState extends State<BiometricEnrollmentView>
               color: isError ? colors.error : colors.textSecondary,
             ),
           ),
-
           const Spacer(flex: 2),
-
           SizedBox(
             width: outerSize,
             height: outerSize,
@@ -259,7 +249,6 @@ class _BiometricEnrollmentViewState extends State<BiometricEnrollmentView>
               ),
             ),
           ),
-
           if (_awaitingSystemPrompt) ...[
             SizedBox(height: spacing.md),
             AppText.bodySmall(
@@ -268,7 +257,6 @@ class _BiometricEnrollmentViewState extends State<BiometricEnrollmentView>
               color: colors.textSecondary,
             ),
           ],
-
           if (_isActive || isEnrolled || _awaitingSystemPrompt) ...[
             SizedBox(height: spacing.lg),
             Row(
@@ -295,9 +283,7 @@ class _BiometricEnrollmentViewState extends State<BiometricEnrollmentView>
               }),
             ),
           ],
-
           const Spacer(flex: 3),
-
           if (widget.status == BiometricEnrollmentStatus.notEnrolled) ...[
             AppButton.primary(
               text: _c.enrollLabel ?? 'Enable $_biometricLabel',
@@ -323,7 +309,6 @@ class _BiometricEnrollmentViewState extends State<BiometricEnrollmentView>
               ),
             ],
           ],
-
           if (_isActive)
             Padding(
               padding: EdgeInsets.symmetric(vertical: spacing.sm),
@@ -333,7 +318,6 @@ class _BiometricEnrollmentViewState extends State<BiometricEnrollmentView>
                     : widget.scanProgress / widget.totalScans,
               ),
             ),
-
           if (isError) ...[
             AppButton.primary(
               text: _c.retryLabel ?? 'Retry',
@@ -352,7 +336,6 @@ class _BiometricEnrollmentViewState extends State<BiometricEnrollmentView>
               ),
             ],
           ],
-
           if (isEnrolled) ...[
             AppButton.primary(
               text: _c.continueLabel ?? 'Continue to Verification',
@@ -362,7 +345,6 @@ class _BiometricEnrollmentViewState extends State<BiometricEnrollmentView>
                   : () => _handleAction(widget.onContinue),
             ),
           ],
-
           SizedBox(height: spacing.xl),
         ],
       ),

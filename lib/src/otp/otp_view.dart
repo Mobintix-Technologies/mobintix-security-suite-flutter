@@ -23,8 +23,7 @@ class OtpView extends StatefulWidget {
   State<OtpView> createState() => _OtpViewState();
 }
 
-class _OtpViewState extends State<OtpView>
-    with SingleTickerProviderStateMixin {
+class _OtpViewState extends State<OtpView> with SingleTickerProviderStateMixin {
   var _otp = '';
   var _busy = false;
   var _canResend = false;

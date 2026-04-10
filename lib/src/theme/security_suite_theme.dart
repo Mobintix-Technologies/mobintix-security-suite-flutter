@@ -132,22 +132,19 @@ class SecuritySuiteTheme extends ThemeExtension<SecuritySuiteTheme> {
     return SecuritySuiteTheme(
       pinActiveColor: Color.lerp(pinActiveColor, other.pinActiveColor, t),
       pinErrorColor: Color.lerp(pinErrorColor, other.pinErrorColor, t),
-      timerActiveColor:
-          Color.lerp(timerActiveColor, other.timerActiveColor, t),
-      timerUrgentColor:
-          Color.lerp(timerUrgentColor, other.timerUrgentColor, t),
+      timerActiveColor: Color.lerp(timerActiveColor, other.timerActiveColor, t),
+      timerUrgentColor: Color.lerp(timerUrgentColor, other.timerUrgentColor, t),
       timerTrackColor: Color.lerp(timerTrackColor, other.timerTrackColor, t),
       scanRingColor: Color.lerp(scanRingColor, other.scanRingColor, t),
       badgeColor: Color.lerp(badgeColor, other.badgeColor, t),
       faceGuideColor: Color.lerp(faceGuideColor, other.faceGuideColor, t),
-      faceOverlayColor:
-          Color.lerp(faceOverlayColor, other.faceOverlayColor, t),
+      faceOverlayColor: Color.lerp(faceOverlayColor, other.faceOverlayColor, t),
       cameraPlaceholderColor:
           Color.lerp(cameraPlaceholderColor, other.cameraPlaceholderColor, t),
       cameraLiveIndicatorColor: Color.lerp(
           cameraLiveIndicatorColor, other.cameraLiveIndicatorColor, t),
-      cameraFaceDetectedColor: Color.lerp(
-          cameraFaceDetectedColor, other.cameraFaceDetectedColor, t),
+      cameraFaceDetectedColor:
+          Color.lerp(cameraFaceDetectedColor, other.cameraFaceDetectedColor, t),
       cameraFaceMissingColor:
           Color.lerp(cameraFaceMissingColor, other.cameraFaceMissingColor, t),
       cameraOverlayTextColor:

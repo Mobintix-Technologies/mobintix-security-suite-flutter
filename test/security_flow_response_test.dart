@@ -62,7 +62,8 @@ void main() {
       expect(config.showBiometricButton, false);
     });
 
-    test('MpinConfig accepts snake_case create + length from API/Firestore', () {
+    test('MpinConfig accepts snake_case create + length from API/Firestore',
+        () {
       final config = MpinConfig.fromJson(const {
         'is_create': true,
         'mpin_length': 6,

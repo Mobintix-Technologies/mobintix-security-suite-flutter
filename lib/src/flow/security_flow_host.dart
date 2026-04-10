@@ -40,9 +40,8 @@ class SecurityFlowHost extends StatelessWidget {
           onComplete: actions.onMpinComplete,
           onForgotPin: actions.onForgotPin,
           // Biometric shortcut is for verify MPIN only; it must not hijack create+confirm.
-          onBiometric: c.showBiometricButton && !c.isCreate
-              ? actions.onBiometric
-              : null,
+          onBiometric:
+              c.showBiometricButton && !c.isCreate ? actions.onBiometric : null,
         );
       case SecurityFlowStepId.otp:
         return OtpView(
@@ -63,8 +62,8 @@ class SecurityFlowHost extends StatelessWidget {
         return FaceDetectionView(
           key: ValueKey('${flow.flowId}_face'),
           config: flow.config as FaceDetectionConfig,
-          cameraPreview: cameraPreviewBuilder?.call(context) ??
-              const SizedBox.shrink(),
+          cameraPreview:
+              cameraPreviewBuilder?.call(context) ?? const SizedBox.shrink(),
           onCapture: actions.onFaceCapture,
           onAlternate: actions.onAlternate,
         );

@@ -370,8 +370,7 @@ class OtpConfig extends SecurityStepConfig {
       maxResendCount:
           _intFromJson(json, 'maxResendCount', 'max_resend_count') ?? 3,
       errorText: _strFromJson(json, 'errorText', 'error_text'),
-      alternateLabel:
-          _strFromJson(json, 'alternateLabel', 'alternate_label'),
+      alternateLabel: _strFromJson(json, 'alternateLabel', 'alternate_label'),
       pinDotShape: _parsePinDotShape(
         json['otpDotShape'] as String? ?? json['otp_dot_shape'] as String?,
       ),

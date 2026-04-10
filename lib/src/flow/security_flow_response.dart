@@ -19,8 +19,7 @@ class SecurityFlowResponse extends Equatable {
   final Map<String, dynamic>? themeJson;
 
   factory SecurityFlowResponse.fromJson(Map<String, dynamic> json) {
-    final raw =
-        json['step'] as String? ?? json['currentStep'] as String? ?? '';
+    final raw = json['step'] as String? ?? json['currentStep'] as String? ?? '';
     final step = SecurityFlowStepId.parse(raw);
     final params = Map<String, dynamic>.from(json['params'] as Map? ?? {});
     return SecurityFlowResponse(

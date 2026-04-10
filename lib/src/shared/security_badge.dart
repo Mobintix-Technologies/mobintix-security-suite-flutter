@@ -10,8 +10,7 @@ class SecurityBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.appColors;
     final spacing = context.appSpacing;
-    final badgeColor =
-        context.securitySuiteTheme?.badgeColor ?? colors.success;
+    final badgeColor = context.securitySuiteTheme?.badgeColor ?? colors.success;
 
     return Semantics(
       label: 'Secured authentication',

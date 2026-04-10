@@ -81,10 +81,8 @@ class _FaceDetectionViewState extends State<FaceDetectionView> {
       child: Column(
         children: [
           SizedBox(height: spacing.xxl),
-
           const SecurityBadge(),
           SizedBox(height: spacing.lg),
-
           AppText.headlineMedium(
             _c.title ?? 'Face Verification',
             textAlign: TextAlign.center,
@@ -97,9 +95,7 @@ class _FaceDetectionViewState extends State<FaceDetectionView> {
               color: colors.textSecondary,
             ),
           ],
-
           SizedBox(height: spacing.lg),
-
           Expanded(
             child: Center(
               child: AspectRatio(
@@ -122,17 +118,13 @@ class _FaceDetectionViewState extends State<FaceDetectionView> {
               ),
             ),
           ),
-
           SizedBox(height: spacing.lg),
-
           AppText.bodyMedium(
             _statusText,
             textAlign: TextAlign.center,
             color: isError ? colors.error : colors.textSecondary,
           ),
-
           SizedBox(height: spacing.lg),
-
           if (isError) ...[
             AppButton.primary(
               text: _c.retryLabel ?? 'Retry',
@@ -149,16 +141,13 @@ class _FaceDetectionViewState extends State<FaceDetectionView> {
               onPressed: () => _handleAction(widget.onCapture),
             ),
           ],
-
           if (_c.alternateLabel != null && widget.onAlternate != null) ...[
             const VSpace.md(),
             AppButton.ghost(
               text: _c.alternateLabel!,
-              onPressed:
-                  _busy ? null : () => _handleAction(widget.onAlternate),
+              onPressed: _busy ? null : () => _handleAction(widget.onAlternate),
             ),
           ],
-
           SizedBox(height: spacing.xl),
         ],
       ),
