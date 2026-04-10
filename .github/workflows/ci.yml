@@ -96,7 +96,8 @@ jobs:
           echo "version=$NEXT" >> "$GITHUB_OUTPUT"
 
       - name: Update pubspec.yaml
-        run: sed -i "s/^version: .*/version: ${{ steps.next.outputs.version }}/" pubspec.yaml
+        run: |
+          sed -i "s/^version: .*/version: ${{ steps.next.outputs.version }}/" pubspec.yaml
 
       - name: Update CHANGELOG.md
         run: |
