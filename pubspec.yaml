@@ -5,8 +5,8 @@ description: >-
 version: 0.0.1
 
 homepage: https://pub.dev/packages/mobintix_security_suite
-repository: https://github.com/Mobintix-Package/mobintix_security_suite
-issue_tracker: https://github.com/Mobintix-Package/mobintix_security_suite_demo/issues
+repository: https://github.com/Mobintix-Technologies/mobintix-security-suite-flutter
+issue_tracker: https://github.com/Mobintix-Technologies/mobintix-security-suite-flutter-demo/issues
 
 topics:
   - security

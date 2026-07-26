@@ -7,7 +7,7 @@ This guide covers pub.dev setup, first publish, and CI/CD auto-publish.
 ## Private repository and public demo
 
 - The **library** GitHub repository (`mobintix_security_suite`) may be **private**. Consumers install **only from [pub.dev](https://pub.dev/packages/mobintix_security_suite)**.
-- **Issues, discussions, and integration help** for external developers are tracked on the **public** **[mobintix_security_suite_demo](https://github.com/Mobintix-Package/mobintix_security_suite_demo)** repository (`issue_tracker` in `pubspec.yaml` points there).
+- **Issues, discussions, and integration help** for external developers are tracked on the **public** **[mobintix_security_suite_demo](https://github.com/Mobintix-Technologies/mobintix-security-suite-flutter-demo)** repository (`issue_tracker` in `pubspec.yaml` points there).
 - The **demo** app should depend on **semver** packages from pub.dev (not `path:`) so a standalone clone of the demo works with `flutter pub get`.
 - Maintainers working in the **monorepo** can use a gitignored **`pubspec_overrides.yaml`** (see `pubspec_overrides.yaml.example` in this package and in the demo) to point at local paths for `mobintix_ui_kit` / `mobintix_security_suite` until changes are published.
 
@@ -100,7 +100,7 @@ Trusted publishing uses OIDC — no secrets needed.
 
 | Field | Value |
 |---|---|
-| **Repository** | `Mobintix-Package/mobintix_security_suite` |
+| **Repository** | `Mobintix-Technologies/mobintix-security-suite-flutter` |
 | **Tag pattern** | `v[0-9]+.[0-9]+.[0-9]+*` (e.g. `v0.0.1`, `v1.0.0-beta.1`) — same as mobintix_ui_kit |
 | **Require environment** | Leave empty |
 
@@ -119,7 +119,7 @@ Check GitHub → Actions → the **Publish to pub.dev** workflow should run.
 
 ## 4. CI/CD Workflow Overview
 
-Same **three-workflow** layout as **[mobintix_ui_kit](https://github.com/Mobintix-Package/mobintix_ui_kit)** (no `example/` here — use **mobintix_security_suite_demo** as the runnable app):
+Same **three-workflow** layout as **[mobintix_ui_kit](https://github.com/Mobintix-Technologies/mobintix-ui-kit-flutter)** (no `example/` here — use **mobintix_security_suite_demo** as the runnable app):
 
 ### `ci.yml` — Continuous integration
 
@@ -221,7 +221,7 @@ Run `dart pub publish --dry-run` and fix all listed errors.
 ### "Authentication failed" in CI
 
 - Verify trusted publishing is configured on pub.dev Admin → Automated publishing.
-- Repository name must match exactly (`Mobintix-Package/mobintix_security_suite`).
+- Repository name must match exactly (`Mobintix-Technologies/mobintix-security-suite-flutter`).
 - Tag pattern must match the workflow (semver-style tags like `v0.0.1`; see `publish.yml`).
 - `publish.yml` must have `permissions: id-token: write`.
 
@@ -237,7 +237,7 @@ Run `dart pub publish --dry-run` and fix all listed errors.
 
 The repo lists **four PNGs** under **`screenshots/`** in **`pubspec.yaml`** → **`screenshots:`**, similar to [mobintix_ui_kit](https://pub.dev/packages/mobintix_ui_kit).
 
-Canonical filenames (must match **`pubspec.yaml`** unless you change both). Match **screen content**, not only tab order (see **[mobintix_security_suite_demo](https://github.com/Mobintix-Package/mobintix_security_suite_demo)** README).
+Canonical filenames (must match **`pubspec.yaml`** unless you change both). Match **screen content**, not only tab order (see **[mobintix_security_suite_demo](https://github.com/Mobintix-Technologies/mobintix-security-suite-flutter-demo)** README).
 
 | File | Tab | What the PNG should show |
 |------|-----|---------------------------|
@@ -248,7 +248,7 @@ Canonical filenames (must match **`pubspec.yaml`** unless you change both). Matc
 
 Workflow:
 
-1. Run **[mobintix_security_suite_demo](https://github.com/Mobintix-Package/mobintix_security_suite_demo)** on a device or emulator (see that repo’s README — *Screenshot reference* and *For maintainers*).
+1. Run **[mobintix_security_suite_demo](https://github.com/Mobintix-Technologies/mobintix-security-suite-flutter-demo)** on a device or emulator (see that repo’s README — *Screenshot reference* and *For maintainers*).
 2. Capture the correct screen for each filename (see table above; order of tabs is **not** enough — e.g. OTP needs the code-entry screen, not MPIN).
 3. Copy the four PNGs into **`mobintix_security_suite/screenshots/`** and, for the public gallery, into **`mobintix_security_suite_demo/screenshots/`** (same names in both repos).
 4. Run **`dart pub publish --dry-run`** before publishing.
